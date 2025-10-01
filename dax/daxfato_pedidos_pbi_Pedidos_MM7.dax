@@ -1,0 +1,16 @@
+/*
+Medida........: Pedidos MM7
+Tabela........: fato_pedidos_pbi
+Definição.....: Média móvel de 7 dias de [Pedidos].
+Formato.......: Número inteiro (ou decimal, se preferir)
+Depende de....: [Pedidos], 'dim_tempo_pbi'[data]
+Observações...: -6 dias inclui o dia corrente + 6 anteriores = 7 dias.
+*/
+Pedidos MM7 =
+VAR DataRef =
+    MAX('dim_tempo_pbi'[data])
+RETURN
+AVERAGEX(
+    DATESINPERIOD('dim_tempo_pbi'[data], DataRef, -6, DAY),
+    [Pedidos]
+)

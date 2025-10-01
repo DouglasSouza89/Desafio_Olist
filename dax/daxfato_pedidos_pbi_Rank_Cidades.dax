@@ -1,0 +1,16 @@
+/*
+Medida........: Rank Cidades
+Tabela........: fato_pedidos_pbi
+Definição.....: Ranking de cidades por [Pedidos].
+Formato.......: Número inteiro
+Depende de....: [Pedidos], 'dim_localidade_pbi'[Cidade]
+Observações...: Use em tabelas/gráficos junto com a coluna de cidade.
+*/
+Rank Cidades =
+RANKX(
+    ALL('dim_localidade_pbi'[Cidade]),
+    [Pedidos],
+    ,
+    DESC,
+    DENSE
+)

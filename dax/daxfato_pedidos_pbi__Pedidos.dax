@@ -1,0 +1,11 @@
+// Measure: Pedidos
+// Table: fato_pedidos_pbi
+// Purpose: Contar a quantidade de pedidos distintos.
+// Context: Respeita todos os filtros aplicados (data, cidade, produto, meio de pagamento etc.).
+// Dependencies: coluna 'fato_pedidos_pbi'[id_pedido]
+// Return: Inteiro (formate como Número inteiro no Power BI).
+// Author: <seu_nome> | Created: 2025-09-30
+// Notes: Para ignorar algum filtro e obter total geral, use CALCULATE([Pedidos], ALL(<tabela_dim>)).
+
+Pedidos =
+DISTINCTCOUNT('fato_pedidos_pbi'[id_pedido])

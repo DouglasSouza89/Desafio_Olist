@@ -1,0 +1,8 @@
+// Measure: ClientesSemLocal
+// Table: dim_clientes_pbi
+// Desc: Qtde de clientes sem local informado
+ClientesSemLocal =
+CALCULATE(
+    DISTINCTCOUNT('dim_clientes_pbi'[id_cliente]),
+    ISBLANK('dim_clientes_pbi'[id_local])
+)

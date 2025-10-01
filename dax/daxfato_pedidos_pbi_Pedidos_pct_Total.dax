@@ -1,0 +1,13 @@
+/*
+Medida........: Pedidos % Total
+Tabela........: fato_pedidos_pbi
+Definição.....: Participação de [Pedidos] no total, ignorando filtros de localização.
+Formato.......: Porcentagem (2 casas decimais)
+Depende de....: [Pedidos]
+Observações...: Usa ALL('dim_localidade_pbi') para calcular o denominador sem filtros de cidade/UF.
+*/
+Pedidos % Total =
+DIVIDE(
+    [Pedidos],
+    CALCULATE([Pedidos], ALL('dim_localidade_pbi'))
+)

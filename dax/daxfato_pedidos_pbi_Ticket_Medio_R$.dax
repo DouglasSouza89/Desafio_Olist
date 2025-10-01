@@ -1,0 +1,10 @@
+/*
+Medida........: Ticket_Médio (R$)
+Tabela........: fato_pedidos_pbi
+Definição.....: Receita média por pedido.
+Formato.......: Moeda (R$)
+Depende de....: [receita], [Pedidos_Distintos]
+Observações...: Se preferir, use [Pedidos] no denominador (se for DISTINCTCOUNT).
+*/
+Ticket_Médio (R$) =
+DIVIDE([receita], [Pedidos_Distintos])

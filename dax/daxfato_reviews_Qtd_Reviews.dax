@@ -1,0 +1,13 @@
+/*
+Medida........: Qtd Reviews
+Tabela........: fato_reviews
+Definição.....: Quantidade total de reviews.
+Formato.......: Número inteiro
+Colunas base..: (linhas de 'fato_reviews') ou 'fato_reviews'[id_review]
+Observações...: COUNTROWS é suficiente se cada linha representa 1 review.
+                Caso precise garantir unicidade por id, use DISTINCTCOUNT.
+*/
+Qtd Reviews =
+COUNTROWS('fato_reviews')
+-- Alternativa:
+-- Qtd Reviews = DISTINCTCOUNT('fato_reviews'[id_review])

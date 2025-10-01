@@ -1,0 +1,11 @@
+/*
+Medida........: Pedidos_Distintos
+Tabela........: fato_pedidos_pbi
+Definição.....: Quantidade de pedidos distintos.
+Formato.......: Número inteiro
+Depende de....: 'fato_pedidos_pbi'[id_pedido]
+Observações...: Se já usa [Pedidos] como DISTINCTCOUNT, você pode simplesmente referenciar [Pedidos].
+*/
+Pedidos_Distintos = [Pedidos]
+// Alternativa explícita:
+// Pedidos_Distintos = DISTINCTCOUNT('fato_pedidos_pbi'[id_pedido])

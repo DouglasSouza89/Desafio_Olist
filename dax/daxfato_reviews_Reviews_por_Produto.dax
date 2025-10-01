@@ -1,0 +1,10 @@
+/*
+Medida........: Reviews por Produto
+Tabela........: fato_reviews
+Definição.....: Quantidade de reviews, para ser analisada por produto.
+Formato.......: Número inteiro
+Depende de....: [Qtd Reviews]
+Observações...: A própria segmentação por produto no visual já faz o corte.
+                Se preferir, basta referenciar [Qtd Reviews].
+*/
+Reviews por Produto = [Qtd Reviews]

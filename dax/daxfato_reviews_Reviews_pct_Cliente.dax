@@ -1,0 +1,13 @@
+/*
+Medida........: Reviews % Cliente
+Tabela........: fato_reviews
+Definição.....: Participação de reviews por cliente em relação ao total.
+Formato.......: Porcentagem (2 casas)
+Depende de....: [Qtd Reviews]
+Observações...: ALL('dim_clientes_pbi') remove o filtro de cliente no denominador.
+*/
+Reviews % Cliente =
+DIVIDE(
+    [Qtd Reviews],
+    CALCULATE([Qtd Reviews], ALL('dim_clientes_pbi'))
+)

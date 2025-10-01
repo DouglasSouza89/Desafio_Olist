@@ -1,0 +1,12 @@
+/*
+Medida........: receita
+Tabela........: fato_pedidos_pbi
+Definição.....: Soma do valor de receita.
+Formato.......: Moeda (R$)
+Depende de....: 'fato_pedidos_pbi'[receita]
+Observações...: Se NÃO houver coluna [receita], substitua por:
+                SUMX('fato_itens_pbi', 'fato_itens_pbi'[preco] * 'fato_itens_pbi'[qtd])
+                + SUM('fato_pedidos_pbi'[frete]).
+*/
+receita =
+SUM('fato_pedidos_pbi'[receita])

@@ -1,0 +1,13 @@
+/*
+Medida........: Pedidos Entregues
+Tabela........: fato_pedidos_pbi
+Definição.....: Quantidade de pedidos com status "delivered".
+Formato.......: Número inteiro
+Depende de....: [Pedidos]
+Observações...: Se o status estiver em PT-BR, troque "delivered" por "entregue" (ou o texto exato na sua coluna).
+*/
+Pedidos Entregues =
+CALCULATE(
+    [Pedidos],
+    'fato_pedidos_pbi'[order_status] = "delivered"
+)

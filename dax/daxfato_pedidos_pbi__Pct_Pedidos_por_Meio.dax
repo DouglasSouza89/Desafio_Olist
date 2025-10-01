@@ -1,0 +1,14 @@
+// Measure: % Pedidos por Meio
+// Table: fato_pedidos_pbi
+// Purpose: Percentual de pedidos entregues dentro de cada meio de pagamento.
+// Context: Usar com 'dim_meio_pagamento_pbi' (ex.: tipo_pagamento) no eixo/legenda/segmentação.
+// Dependencies: [Pedidos Entregues]; usa ALL('dim_meio_pagamento_pbi') para calcular o total do denominador.
+// Return: Decimal entre 0 e 1 (formate como Percentual no Power BI).
+// Author: <seu_nome> | Created: 2025-09-30
+// Notes: DIVIDE evita erro de divisão por zero. Pode definir um valor padrão no 3º parâmetro.
+
+% Pedidos por Meio =
+DIVIDE(
+    [Pedidos Entregues],
+    CALCULATE([Pedidos Entregues], ALL('dim_meio_pagamento_pbi'))
+)

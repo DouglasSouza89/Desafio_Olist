@@ -1,0 +1,10 @@
+/*
+Medida........: Nota Média do Cliente
+Tabela........: fato_reviews
+Definição.....: Média das notas dos reviews por cliente (conforme contexto).
+Formato.......: Número decimal (ex.: 1 casa)
+Coluna base...: 'fato_reviews'[nota_review]
+Observações...: O contexto (cliente, período, produto) define "de quem" é a média.
+*/
+Nota Média do Cliente =
+AVERAGE('fato_reviews'[nota_review])
