@@ -1,0 +1,28 @@
+// ================================================================================================
+// Query: dim_clientes_pbi
+// Tipo: Staging (dimensão de clientes)
+// Fonte: CSV (dim_clientes_pbi.csv) — pipeline/local data lake
+// Objetivo: Carregar a dimensão de clientes, tipar colunas e garantir unicidade por id_cliente.
+// Esquema (colunas):
+//   - id_cliente        (text)        — chave natural do cliente
+//   - id_cliente_unico  (text)        — identificador único/derivado
+//   - id_local          (Int64.Type)  — chave da localidade
+//   - cep_prefixo       (Int64.Type)  — prefixo do CEP
+// Passos principais:
+//   1) Csv.Document → leitura do arquivo
+//   2) Table.PromoteHeaders → promover cabeçalhos
+//   3) Table.TransformColumnTypes → tipagem de dados
+//   4) Table.Distinct([id_cliente]) → remover duplicatas
+// Observações:
+//   - Parametrizar o caminho do arquivo (pRootPath/pFilePath) para portabilidade, se possível.
+//   - Duplicatas removidas indicam possível problema de qualidade na origem (auditar quando > 0).
+// Autor: Douglas Souza | Data: 2025-10-01 | Versão: 1.0
+// ================================================================================================
+
+let
+    Fonte = Csv.Document(File.Contents("\\wsl.localhost\Ubuntu-22.04\root\olist-pipeline\mart\dim_clientes_pbi.csv"),[Delimiter=";", Columns=4, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"id_cliente", type text}, {"id_cliente_unico", type text}, {"id_local", Int64.Type}, {"cep_prefixo", Int64.Type}}),
+    #"Duplicatas Removidas" = Table.Distinct(#"Tipo Alterado", {"id_cliente"})
+in
+    #"Duplicatas Removidas"
