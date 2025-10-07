@@ -6,6 +6,20 @@
 
 ---
 
+## 🧭 Sumário
+- [🔎 Objetivo](#-objetivo)
+- [🗂 Estrutura do repositório](#-estrutura-do-repositório)
+- [📚 Documentação](#-documentação)
+- [🏗 Modelo de dados (resumo)](#-modelo-de-dados-resumo)
+- [📈 Principais KPIs & Métricas](#-principais-kpis--métricas)
+- [🔧 ETL (Power Query)](#-etl-power-query)
+- [▶️ Como abrir e reproduzir](#️-como-abrir-e-reproduzir)
+- [🖼 Algumas telas](#-algumas-telas)
+- [📌 Roadmap (ideias)](#-roadmap-ideias)
+- [📬 Contato](#-contato)
+
+---
+
 ## 🔎 Objetivo
 
 Construir um painel analítico com KPIs de negócio e análises por **cidade**, **meio de pagamento** e **clientes com mais reviews** — mostrando o processo fim a fim:
@@ -16,13 +30,22 @@ Construir um painel analítico com KPIs de negócio e análises por **cidade**, 
 
 ## 🗂 Estrutura do repositório
 
-
 - **PBIX**: [`pbix/Estudo_Olist.pbix`](pbix/Estudo_Olist.pbix)
 - **Medidas DAX**: [`dax/`](dax/)
 - **Power Query (M)**:
   - Staging: [`powerquery/powerquery_staging_/`](powerquery/powerquery_staging_/)
   - Params/Funções: [`powerquery/powerquery_params_/`](powerquery/powerquery_params_/)
 - **Imagens**: [`images/DESAFIO_Olist/`](images/DESAFIO_Olist/)
+
+---
+
+## 📚 Documentação
+
+- 📄 **Dicionário de Dados**: [`docs/data_dictionary.md`](docs/data_dictionary.md)  
+- 🗺️ **Diagrama do Modelo (Mermaid)**: [`docs/model_diagram.md`](docs/model_diagram.md)
+
+> Dica: se os arquivos ainda não existirem, crie a pasta `docs/` na raiz do repositório  
+> e adicione esses dois `.md` (mesmo vazios) para iniciar.
 
 ---
 
@@ -114,4 +137,3 @@ Algumas medidas (todas disponíveis em [`/dax`](dax/)):
 
 Autor: **Douglas Souza**  
 Se quiser trocar ideia sobre o projeto, abra uma *issue* ou mande uma mensagem. 🙂
-
