@@ -1,91 +1,105 @@
-# Dicionário de Dados — Desafio Olist
-> Autor: Douglas Souza · Data: 2025-10-06
 
-Este dicionário resume os campos das tabelas do modelo (fatos e dimensões), com tipos, chaves e observações.
+---
 
-## Convenções
-- **PK**: chave primária · **FK**: chave estrangeira  
-- Tipos: `text`, `int64`, `number`, `date`, `datetime`
+## 2) `docs/data_dictionary.md` (dicionário de dados)
+
+> Copie tudo abaixo e cole no arquivo `docs/data_dictionary.md`.
+
+```markdown
+# Dicionário de Dados
+
+> Descrição dos principais campos por tabela. Tipos seguem o modelo após o ETL (Power Query).
 
 ---
 
 ## Fatos
 
 ### `fato_pedidos_pbi`
-| Campo                | Tipo     | Chave | Descrição                                                  | Origem/Regra |
-|----------------------|----------|-------|------------------------------------------------------------|--------------|
-| `id_pedido`          | text     | PK    | Identificador do pedido                                    | CSV `fato_pedidos_pbi.csv` |
-| `customer_id`        | text     | FK    | Cliente do pedido (liga em `dim_clientes_pbi[id_cliente]`) | CSV |
-| `data_compra`        | date     | FK    | Data da compra (liga em `dim_tempo_pbi[data]`)             | CSV |
-| `id_meio_pagamento`  | int64    | FK    | Meio de pagamento (liga em `dim_meio_pagamento_pbi`)       | CSV |
-| `order_status`       | text     | —     | Status do pedido                                           | CSV |
-| `receita`            | number   | —     | Valor financeiro (base p/ Ticket Médio)                    | CSV |
+| Coluna                        | Tipo       | Descrição                                                     | Exemplo                         |
+|------------------------------|-----------|----------------------------------------------------------------|---------------------------------|
+| `id_pedido` (PK)             | text      | Identificador do pedido                                        | `e481f51cbdc54678b7cc49136f2d6af7` |
+| `customer_id`                | text      | Identificador do cliente (nativo Olist)                        | `9ef432eb6251297304e76186b10a928d` |
+| `order_status`               | text      | Status do pedido                                               | `delivered`                     |
+| `order_purchase_timestamp`   | datetime  | Data/hora da compra                                            | `2017-07-28 10:20:00`           |
+| `order_approved_at`          | datetime  | Data/hora de aprovação                                         | `2017-07-28 11:00:00`           |
+| `order_delivered_carrier_date` | datetime| Coleta pela transportadora                                     | `2017-07-29 08:10:00`           |
+| `order_delivered_customer_date`| datetime| Entrega ao cliente                                             | `2017-08-03 12:45:00`           |
+| `order_estimated_delivery_date`| date    | Data estimada de entrega                                       | `2017-08-05`                    |
+| `receita`                    | number    | Valor pago (base do Ticket Médio)                              | `159.33`                        |
+| `id_meio_pagamento` (FK)     | int       | Chave para `dim_meio_pagamento_pbi`                            | `1`                             |
+| `data_compra` (FK)           | date      | Data da compra (para ligar na `dim_tempo_pbi`)                 | `2017-07-28`                    |
+| `id_cliente` (FK)            | text      | Cliente do pedido (para `dim_clientes_pbi`)                    | `8ceb3051...`                   |
 
 ### `fato_itens_pbi`
-| Campo       | Tipo   | Chave | Descrição                                             | Origem/Regra |
-|-------------|--------|-------|-------------------------------------------------------|--------------|
-| `id_pedido` | text   | FK    | Liga em `fato_pedidos_pbi[id_pedido]`                 | CSV |
-| `id_produto`| text   | FK    | Liga em `dim_produtos_pbi[id_produto]`                | CSV |
-| `preco`     | number | —     | Preço do item                                         | CSV |
-| `frete`     | int64  | —     | Custo de frete (por item)                             | CSV |
+| Coluna        | Tipo  | Descrição                               | Exemplo  |
+|---------------|-------|------------------------------------------|----------|
+| `id_pedido`   | text  | FK para pedido                           | `...af7` |
+| `id_produto`  | text  | FK para produto                          | `...3b1` |
+| `preco`       | int   | Preço do item                            | `120`    |
+| `frete`       | int   | Valor do frete                           | `19`     |
 
 ### `fato_reviews`
-| Campo               | Tipo     | Chave | Descrição                                             | Origem/Regra |
-|---------------------|----------|-------|-------------------------------------------------------|--------------|
-| `id_review`         | text     | PK    | Identificador da avaliação                            | CSV |
-| `id_pedido`         | text     | FK    | Liga em `fato_pedidos_pbi[id_pedido]`                 | CSV |
-| `id_cliente`        | text     | FK    | Liga em `dim_clientes_pbi[id_cliente]`                | CSV |
-| `id_produto`        | text     | FK    | Liga em `dim_produtos_pbi[id_produto]`                | CSV |
-| `nota_review`       | int64    | —     | Nota da avaliação                                     | CSV |
-| `data_criacao_review` | datetime | FK  | Liga em `dim_tempo_pbi[data]`                         | CSV |
+| Coluna               | Tipo     | Descrição                          | Exemplo       |
+|---------------------|----------|------------------------------------|---------------|
+| `id_review` (PK)    | text     | Identificador da review            | `R123...`     |
+| `id_pedido` (FK)    | text     | FK para pedido                     | `...af7`      |
+| `id_cliente`        | text     | Cliente que avaliou                | `...928d`     |
+| `id_produto` (FK)   | text     | Produto avaliado                   | `...3b1`      |
+| `nota_review`       | int      | Nota (1 a 5)                       | `5`           |
+| `data_criacao_review` | datetime | Data/hora da review               | `2017-08-04`  |
 
 ---
 
 ## Dimensões
 
 ### `dim_clientes_pbi`
-| Campo             | Tipo   | Chave | Descrição                                   | Origem/Regra |
-|-------------------|--------|-------|---------------------------------------------|--------------|
-| `id_cliente`      | text   | PK    | Cliente (natural)                           | CSV |
-| `id_cliente_unico`| text   | —     | Derivado/normalizado                        | CSV |
-| `id_local`        | int64  | FK    | Liga em `dim_localidade_pbi[id_local]`      | CSV |
-| `cep_prefixo`     | int64  | —     | Prefixo do CEP                              | CSV |
+| Coluna             | Tipo  | Descrição                              |
+|--------------------|-------|----------------------------------------|
+| `id_cliente` (PK)  | text  | Identificador do cliente               |
+| `id_cliente_unico` | text  | Chave “global” do cliente              |
+| `id_local` (FK)    | int   | Localidade do cliente                  |
+| `cep_prefixo`      | int   | Prefixo de CEP                         |
 
 ### `dim_localidade_pbi`
-| Campo     | Tipo   | Chave | Descrição                 | Origem/Regra |
-|-----------|--------|-------|---------------------------|--------------|
-| `id_local`| text   | PK    | Localidade (código)       | CSV |
-| `cidade`  | text   | —     | Cidade                    | CSV |
-| `uf`      | text   | —     | Unidade da Federação      | CSV |
-| `lat`     | number | —     | Latitude                  | CSV |
-| `lng`     | number | —     | Longitude                 | CSV |
-
-### `dim_meio_pagamento_pbi`
-| Campo              | Tipo  | Chave | Descrição            | Origem/Regra |
-|--------------------|-------|-------|----------------------|--------------|
-| `id_meio_pagamento`| int64 | PK    | Código do meio       | CSV |
-| `tipo_pagamento`   | text  | —     | Descrição do meio    | CSV |
+| Coluna        | Tipo  | Descrição                        |
+|---------------|-------|----------------------------------|
+| `id_local`(PK)| text  | Identificador da localidade      |
+| `cep_prefixo` | int   | Prefixo de CEP                   |
+| `cidade`      | text  | Cidade                           |
+| `uf`          | text  | Unidade Federativa               |
+| `lat`         | float | Latitude                         |
+| `lng`         | float | Longitude                        |
 
 ### `dim_produtos_pbi`
-| Campo             | Tipo  | Chave | Descrição                       | Origem/Regra |
-|-------------------|-------|-------|----------------------------------|--------------|
-| `id_produto`      | text  | PK    | Produto                          | CSV |
-| `categoria_produto`| text | —     | Categoria                        | CSV |
-| `tam_nome`        | int64 | —     | Tamanho do nome do produto       | CSV |
-| `tam_descricao`   | int64 | —     | Tamanho da descrição             | CSV |
-| `qtde_fotos`      | int64 | —     | Quantidade de fotos              | CSV |
-| `peso_g`          | int64 | —     | Peso em gramas                   | CSV |
+| Coluna             | Tipo | Descrição                                |
+|--------------------|------|------------------------------------------|
+| `id_produto` (PK)  | text | Identificador do produto                 |
+| `categoria_produto`| text | Categoria do produto                     |
+| `tam_nome`         | int  | Tamanho do nome do produto               |
+| `tam_descricao`    | int  | Tamanho da descrição                     |
+| `qtde_fotos`       | int  | Quantidade de fotos                      |
+| `peso_g`           | int  | Peso em gramas                           |
 
 ### `dim_tempo_pbi`
-| Campo     | Tipo | Chave | Descrição                         | Origem/Regra |
-|-----------|------|-------|-----------------------------------|--------------|
-| `data`    | date | PK    | Data (chave)                      | CSV |
-| `id_tempo`| int64| —     | Id técnico                        | CSV |
-| `ano`     | int64| —     | Ano                               | CSV |
-| `mes`     | int64| —     | Mês número                        | CSV |
-| `mes_ano` | date | —     | Primeiro dia do mês (conveniência)| CSV |
-| `dia`     | int64| —     | Dia do mês                        | CSV |
-| `semana_iso`| int64| —   | Semana ISO                        | CSV |
-| `tri`     | int64| —     | Trimestre                         | CSV |
+| Coluna      | Tipo   | Descrição                       |
+|-------------|--------|---------------------------------|
+| `data` (PK) | date   | Data calendário                 |
+| `id_tempo`  | int    | Chave técnica                   |
+| `ano`       | int    | Ano                             |
+| `mes`       | int    | Mês                             |
+| `mes_ano`   | date   | Primeiro dia do mês             |
+| `dia`       | int    | Dia do mês                      |
+| `semana_iso`| int    | Semana ISO                      |
+| `trimestre` | int    | Trimestre                       |
 
-> **Atualize/complete** a tabela conforme evoluir o modelo.
+### `dim_meio_pagamento_pbi`
+| Coluna               | Tipo | Descrição             |
+|----------------------|------|-----------------------|
+| `id_meio_pagamento` (PK) | int  | Chave do meio de pagamento |
+| `tipo_pagamento`     | text | Ex.: cartão, boleto   |
+
+---
+
+> **Observações**
+> - Tipos são pós-ETL. Se divergirem do seu modelo final, ajuste aqui para manter alinhado.
+> - Campos adicionais podem ser incluídos conforme evolução do projeto.
